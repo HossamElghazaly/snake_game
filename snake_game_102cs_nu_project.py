@@ -1,180 +1,181 @@
-#  for import packages 
-import turtle 
+import turtle
+import time
 import random
-import time 
 
-# to make the screen 
-screen = turtle.Screen()
-screen.title("snake game . ")
-screen.setup(width=700 , height= 700)
-screen.tracer(0)
-screen.bgcolor("#1d1d1d")
-
-# game boeder 
-
-turtle.speed(5)
-turtle.pen (4)
-turtle.penup()
-turtle.goto(-310 , 250 )
-turtle.pendown()
-turtle.color("red ")
-turtle.forward(600)
-turtle.right(90) 
-turtle.forward(500)
-turtle.right(90) 
-turtle.forward(600)
-turtle.right(90) 
-turtle.forward(500)
-turtle.penup()
-turtle.hideturtle()
-
-# score
-
-score = 0 
 delay = 0.1
 
-# snake 
+# Score
 
-snake = turtle.Turtle()
-snake.speed()
-snake.shape("square")
-snake.color("green")
-snake.penup()
-snake.goto(0 ,0)
-snake.direction = 'stop'
- 
+score = 0
+high_score = 0
 
- # food 
-fruit =turtle.Turtle
-fruit.speed(0)
-fruit.shape("square")
-fruit.color("white")
-fruit.penup()
-fruit.goto(30 , 30 )
+# Set up the screen
 
-old_fruit = []
+wn = turtle.Screen()
+wn.title("Snake Game Project")
+wn.bgcolor("green")
+wn.setup(width=600, height=600)
+wn.tracer(0)  #  To turns off the screen updates
 
+# Snake head
 
-# scoring
+head = turtle.Turtle()
+head.speed(0)
+head.shape("square")
+head.color("black")
+head.penup()
+head.goto(0, 0)
+head.direction = "stop"
 
-scoring = turtle.Turtle()
-scoring.speed(0)
-scoring.color("white ")
-scoring.penup()
-scoring.hideturtle
-scoring.goto(0 , 300)
-scoring.write("score :" , align="center" , font= ("courier" , 24 , "bold"))
+# Snake food
 
-# snake movement define 
+food = turtle.Turtle()
+food.speed(0)
+food.shape("circle")
+food.color("red")
+food.penup()
+food.goto(0, 100)
 
-def  snake_go_up():
-    if snake.direction !="down":
-        snake.direction = "up"
+segments = []
 
-def  snake_go_down():
-    if snake.direction !="up":
-        snake.direction = "down"
+#  Score counting
 
-def  snake_go_left():
-    if snake.direction !="right":
-        snake.direction = "left"
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape("square")
+pen.color("white")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.write("Score: 0  Highest Score: 0", align="center", font=("Courier", 24, "normal"))
 
+#  Movement functions 
 
-def  snake_go_right():
-    if snake.direction !="left":
-        snake.direction = "right"
+def go_up():
+    if head.direction != "down":
+        head.direction = "up"
 
-def snake_move():
-    if snake.direction == "up" :
-        y = snake.ycor()
-        snake.sety(y + 20 )
-    if snake.direction == "down" :
-        y = snake.ycor()
-        snake.sety(y - 20 )
-    if snake.direction == "left" :
-        x = snake.xcor()
-        snake.setx(x - 20 )
-    if snake.direction == "right" :
-        y = snake.xcor()
-        snake.setx(x + 20 )    
+def go_down():
+    if head.direction != "up":
+        head.direction = "down"
 
-# keyboard binding
+def go_left():
+    if head.direction != "right":
+        head.direction = "left"
 
-screen.listen()
+def go_right():
+    if head.direction != "left":
+        head.direction = "right"
 
-screen.onkeypress(snake_go_up ,  "UP")
-screen.onkeypress(snake_go_down ,  "Down")
-screen.onkeypress(snake_go_left , "Left")
-screen.onkeypress(snake_go_right , "Right")
+def move():
+    if head.direction == "up":
+        y = head.ycor()
+        head.sety(y + 20)
 
-# main loop 
+    if head.direction == "down":
+        y = head.ycor()
+        head.sety(y - 20)
 
-while True :
-    screen.update()
+    if head.direction == "left":
+        x = head.xcor()
+        head.setx(x - 20)
 
-    # snake &&  fruit =
+    if head.direction == "right":
+        x = head.xcor()
+        head.setx(x + 20)
 
-    if snake.distance(fruit) < 20 :
-        x = random.randint(-290 , 270 )
-        y = random. randint(-240 , 240 )
-        fruit.goto( x, y )
-        scoring.clear()
-        score +=1
-        scoring.write("score : {}".format(score) , align="center" , font= ("courier" , 24 , "bold"))
-        delay -= 0.001 
+# Keyboard bindings (using arrow keys)
 
-    # making the new food 
+wn.listen()
+wn.onkeypress(go_up, "Up")  # Up arrow key
+wn.onkeypress(go_down, "Down")  # Down arrow key
+wn.onkeypress(go_left, "Left")  # Left arrow key
+wn.onkeypress(go_right, "Right")  # Right arrow key
 
-    new_fruit = turtle.Turtle()
-    new_fruit.speed(0)
-    new_fruit.shape("square")
-    new_fruit.color("red")
-    new_fruit.penup()
+# Main game loop
 
-    old_fruit.append(new_fruit)
+try:
+    while True:
+        wn.update()
 
-    # adding snake body 
-
-    for index in range (len(old_fruit) -1,0,-1):
-        a = old_fruit[index -1].xcor()
-        b = old_fruit[index -1].ycor()
-
-        old_fruit[index].goto(a ,b)
-
-    if len(old_fruit) > 0 :
-        a = snake.xcor()
-        b = snake.ycor()
-
-        old_fruit[0].goto( a, b )
-
-        snake_move()
-
-
-    # snake && border
-
-    if snake.xcor() > 280 or snake.xcor() < -300 or snake.ycor() > 240  or snake.ycor() < -240 :
-
-        time.sleep(1)
-        screen.clear()
-        screen.bgcolor("turquoise")
-        scoring.goto(0 , 0)
-        scoring.write(" GAME OVER YOU LOST  \n  your score is {}".format(score) , align="center" , font= ("courier" , 30 , "bold"))
-
-    # sanke colisions //
- 
-    for food in old_fruit :
-        if food.distance(snake) < 20 :
+        
+        if head.xcor() > 290 or head.xcor() < -290 or head.ycor() > 290 or head.ycor() < -290:
             time.sleep(1)
-        screen.clear()
-        screen.bgcolor("turquoise")
-        scoring.goto(0 , 0)
-        scoring.write(" GAME OVER YOU LOST  \n  your score is {}".format(score) , align="center" , font= ("courier" , 30 , "bold"))
+            head.goto(0, 0)
+            head.direction = "stop"
+
+            
+            for segment in segments:
+                segment.goto(1000, 1000)
+
+            
+            segments.clear()
+
+        
+            score = 0
+
+           
+            delay = 0.1
+
+            pen.clear()
+            pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+
+        # Check for a collision with the food
+
+        if head.distance(food) < 20:
+            # Move the food to a random spot
+            x = random.randint(-290, 290)
+            y = random.randint(-290, 290)
+            food.goto(x, y)
+
+            new_segment = turtle.Turtle()
+            new_segment.speed(0)
+            new_segment.shape("square")
+            new_segment.color("grey")
+            new_segment.penup()
+            segments.append(new_segment)
+
+            delay -= 0.001
+            score += 10
+
+            if score > high_score:
+                high_score = score
+
+            pen.clear()
+            pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
+
+        for index in range(len(segments) - 1, 0, -1):
+            x = segments[index - 1].xcor()
+            y = segments[index - 1].ycor()
+            segments[index].goto(x, y)
+
+        if len(segments) > 0:
+            x = head.xcor()
+            y = head.ycor()
+            segments[0].goto(x, y)
+
+        move()
+
+        for segment in segments:
+            if segment.distance(head) < 20:
+                time.sleep(1)
+                head.goto(0, 0)
+                head.direction = "stop"
+
+                for segment in segments:
+                    segment.goto(1000, 1000)
+
+                segments.clear()
+
+                score = 0
+                delay = 0.1
+
+                pen.clear()
+                pen.write("Score: {}  High Score: {}".format(score, high_score), align="center", font=("Courier", 24, "normal"))
 
         time.sleep(delay)
+except turtle.Terminator:
+    print("Game has been closed.")
+    exit()
 
-    turtle.Terminator()
- 
-
-
-
-
+wn.mainloop()
