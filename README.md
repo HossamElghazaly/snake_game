@@ -33,7 +33,7 @@ This is a simple **Snake Game** built using **Python's turtle graphics** module.
 
 ```bash
 python snake_game.py
+```
 
 
-
-## Note the readme has beEn written with AI (GPT)
+## Note the readme has been written with AI (GPT)
